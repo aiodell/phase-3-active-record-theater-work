@@ -1,13 +1,9 @@
 class Audition < ActiveRecord::Base
-  belongs_to :roles
+  belongs_to :role
 
-  def role
-    self.roles.character_name
+  # change the hired attribute to true
+  def call_back
+    self.update(hired: true)
   end
 
-  def callback
-    if self.hired == false
-        self.hired = true
-    end
-  end
 end

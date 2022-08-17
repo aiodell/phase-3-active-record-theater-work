@@ -1,31 +1,35 @@
 class Role < ActiveRecord::Base
-
     has_many :auditions
 
-    def auditions
-        
-    end
+    # return an array of names from the actors associated with the role
     def actors
- 
+        self.pluck( :actor )
     end
 
-    def locations
-
+    # returns and array of locations from the auditions associated with this role
+    def location
+        self.pluck( :location )
     end
 
+    # returns the first instance of the audition that was hired for the role
+    # or returns a string 'no actor has been hired for this role
     def lead
-        if hired == true
-            self.audition.first
-        else
-            "no actor has been hired for this role"
-        end
+        actors = self.auditions.where(hired: true)
+        actors.exists? ? actors.first : "no actor has been hired for this role"
     end
 
+    # returns the second instance of the audition that was hired for this
+    # role or returns there is no understudy
     def understudy
-        if hired  == true
-            self.audition.second
-        else
-            "no actor has been hired for understory for this role"
-        end
+        actors = self.auditions.where(hired: true)
+        actors ? actors.second : "no actor has been hired for the understudy for this role"
     end
 end
+
+
+    # end
+
+    # def understudy
+    #     actors = self.auditions.where( hired: true).second
+    #     actors ? actors : "no actor has been hired for understudy for this role"
+    # end
